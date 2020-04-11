@@ -10,6 +10,7 @@ class YoutubeAPI(object):
 		#Initialize credentials for public youtube information
 		api_key = proj_keys.yt_api_key
 		self.pub_youtube = build('youtube', 'v3', developerKey = api_key)
+
 		#Initialize credentials for retrieving user Yotube information
 		client_secrets_file = proj_keys.yt_client_secret_file
 		flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
@@ -40,4 +41,38 @@ class YoutubeAPI(object):
 		items = res['items']
 		for item in items:
 			print(item['snippet']['title'])
+
+	def getUserPlaylists(self):
+		req  = self.youtube.playlists().list(part = 'snippet', mine = True)
+		res =  req.execute()
+		items = res['items']
+		for item in items:
+			print(item)
+			print(str(item['snippet']['title']))
+
+	def getUserPlaylistSongs(self, playlistIdVal):
+		#Takes in a playlistID, returns list of song titles from playlist
+		newsong_titles = []
+		req  = self.youtube.playlistItems().list(part = 'snippet', playlistId = playlistIdVal, maxResults = 50)
+		res =  req.execute()
+		items = res['items']
+		for item in items:
+			itemTitle = item['snippet']['title']
+			newsong_titles.append(self.getSongDetails(itemTitle))
+		print(newsong_titles)
+		return newsong_titles
+
+	def getSongDetails(self,song):
+		#Cuts out the uneeded paranthesis from the songs 
+		if '(' in song:
+			index = song.find('(')
+			newsong = song[:index]
+			return newsong
+		else:
+			return song
+
+
+if __name__ == '__main__':
+	yt = YoutubeAPI()
+	yt.getUserPlaylistSongs(proj_keys.playlist_id)
 
