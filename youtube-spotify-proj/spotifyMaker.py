@@ -2,6 +2,7 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 import proj_keys
+import ytapi
 scope = 'user-top-read user-library-read playlist-modify-public playlist-modify-private'
 username = proj_keys.usr
 SPOTIPY_CLIENT_ID = proj_keys.client_id
@@ -59,7 +60,7 @@ class SpotifyMaker(object):
             print("Cannot find: " + title)
             return ""
 
-    def makeYoutubePlaylist(self, listofsongs):
+    def makePlaylist(self, listofsongs):
         songIds = []
         if self.token:
             sp = spotipy.Spotify(auth=self.token)
@@ -73,8 +74,25 @@ class SpotifyMaker(object):
         else:
             print("Can't get token for ", username)
 
+    def makeYoutubePlaylist(self):
+        yt = ytapi.YoutubeAPI()
+        listofsongs = yt.transferPlaylistToSpotify()
+        if len(listofsongs) != 0:
+            songIds = []
+            if self.token:
+                sp = spotipy.Spotify(auth=self.token)
+                playlist = sp.user_playlist_create(username, "Youtube Playlist")
+                playlistId = playlist['id']
+                for song in listofsongs:
+                    songId = self.getSongForPlaylist(song)
+                    if len(songId) != 0:
+                        songIds.append(songId)
+                sp.user_playlist_add_tracks(username, playlistId, songIds)
+            else:
+                print("Can't get token for ", username)
+
 
 
 if __name__ == '__main__':
     sm = SpotifyMaker()
-    sm.makeYoutubePlaylist(['Earl Sweatshirt - Riot! ', 'Lupe Fiasco - Kick, Push ', 'Madvillain - All Caps'])
+    sm.makeYoutubePlaylist()

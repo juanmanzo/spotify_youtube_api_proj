@@ -71,6 +71,31 @@ class YoutubeAPI(object):
 		else:
 			return song
 
+	def transferPlaylistToSpotify(self):
+		#Initiates transfer of playlist to spotify
+		newsong_title = []
+		playlists = {}
+		req  = self.youtube.playlists().list(part = 'snippet', mine = True)
+		res =  req.execute()
+		items = res['items']
+		for item in items:
+			playlists[item['snippet']['title']] = item['id']
+		print("Choose a playlist to transfer to Spotify:")
+		flag = True
+		while flag:
+			for playlist in playlists:
+				print(playlist)
+			x = input("Enter the name of the playlist as you see above (Case Sensitive): ")
+			if x in playlists:
+				newsong_titles = self.getUserPlaylistSongs(playlists[x])
+				flag = False
+			else:
+				print("Cannot find the playlist titled: "+ x)
+		return newsong_titles
+
+
+
+
 
 if __name__ == '__main__':
 	yt = YoutubeAPI()
