@@ -23,6 +23,7 @@ pip install spotipy --upgrade
 3.Download the JSON file that contains your OAuth 2.0 credentials.
 
 proj_keys.yt_api_key = 'Your youtube/google api key'
+
 proj_keys.yt_client_secret_file = 'Your JSON file'
 ### Spotify API
 1. Create a [Spotify Client ID](https://developer.spotify.com/dashboard/login)
@@ -33,7 +34,7 @@ proj.client_id='Your Client ID'
 
 proj.client_secret='Your Client Secret'
 
-## Create Spotify Playlist using Youtube Playlist
+### Create Spotify Playlist using Youtube Playlist
 Create a SpotifyMaker Object
 
 Call the makeYoutubePlaylist() method 
