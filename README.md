@@ -30,6 +30,7 @@ proj_keys.yt_client_secret_file = 'Your JSON file'
 2. Get Client Secret
 
 proj.client_id='Your Client ID'
+
 proj.client_secret='Your Client Secret'
 
 ## Create Spotify Playlist using Youtube Playlist
