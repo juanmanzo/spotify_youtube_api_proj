@@ -18,29 +18,6 @@ class YoutubeAPI(object):
 		self.credentials = flow.run_console()
 		self.youtube = build('youtube', 'v3', credentials=self.credentials)
 
-	def getUserSubscriptions(self):
-		request = self.youtube.subscriptions().list(
-        part="snippet", mine = True, maxResults = 20
-    	)
-
-		res  = request.execute()
-		items = res['items']
-		for item in items:
-			print(item['snippet']['title'])
-
-	def getYoutuberSubcriptions(self, channelIdVal):
-		req = self.pub_youtube.subscriptions().list(part = 'snippet', channelId = channelIdVal)
-		res  = req.execute()
-		items = res['items']
-		for item in items:
-			print(item['snippet']['title'])
-
-	def getYoutubeVideos(self, query):
-		req  = self.pub_youtube.search().list(q= query, part = 'snippet', type = 'video')
-		res  = req.execute()
-		items = res['items']
-		for item in items:
-			print(item['snippet']['title'])
 
 	def getUserPlaylists(self):
 		req  = self.youtube.playlists().list(part = 'snippet', mine = True)
